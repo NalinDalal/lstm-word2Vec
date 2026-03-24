@@ -4,3 +4,8 @@
 
 
 [LSTM](./lstm.md)
+
+- [Project:  **Char-level LSTM Shakespeare generator** — train on Shakespeare corpus, compare outputs at 1k / 10k / 100k steps. Log gradient norms and confirm they no longer vanish.](./char_lstm_notes.md)
+
+
+- [Implementation of LSTM](./main.py)
