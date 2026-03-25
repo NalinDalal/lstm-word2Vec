@@ -101,8 +101,8 @@ Gates are a way to optionally let information through. They are composed out of 
 
 ```mermaid
 flowchart TB
-    Input[Input Vector] --> Sigmoid[σ] --> Output[Output<br/>0-1]
-    Output --> Mul[×]
+    Input["Input Vector"] --> Sigmoid --> Output["Output 0-1"]
+    Output --> Mul
     Mul --> Result
 ```
 
@@ -186,8 +186,8 @@ The **multiplicative gate units** learn to open and close access to the constant
 flowchart TB
     subgraph Memory_Cell
         direction TB
-        Input[Input Gate<br/>σ] --> Cell[Memory Cell<br/>CEC]
-        Output[Output Gate<br/>σ] --> Cell
+        Input["Input Gate"] --> Cell["Memory Cell CEC"]
+        Output["Output Gate"] --> Cell
     end
     
     x_t & h_prev --> Input
@@ -254,23 +254,23 @@ Where sigmoid: $\sigma(x) = \frac{1}{1 + e^{-x}}$ (outputs 0-1)
 ```mermaid
 flowchart LR
     subgraph Step1_Forget
-        F1[h_{t-1}, x_t] --> F2[σ] --> F3[f_t]
+        F1["h_{t-1}, x_t"] --> F2 --> F3["f_t"]
     end
     
     subgraph Step2_Input
-        I1[h_{t-1}, x_t] --> I2[σ] --> I3[i_t]
-        I1 --> I4[tanh] --> I5[C̃_t]
+        I1["h_{t-1}, x_t"] --> I2 --> I3["i_t"]
+        I1 --> I4 --> I5["C_tilde_t"]
     end
     
     subgraph Step3_Update
-        C_prev[C_{t-1}] --> Mul1[×] --> C_new[C_t]
+        C_prev["C_{t-1}"] --> Mul1 --> C_new["C_t"]
         F3 --> Mul1
-        I3 & I5 --> Add[+] --> Mul1
+        I3 & I5 --> Add --> Mul1
     end
     
     subgraph Step4_Output
-        I1 --> O1[σ] --> O2[o_t]
-        C_new --> O3[tanh] --> O4[×] --> O5[h_t]
+        I1 --> O1 --> O2["o_t"]
+        C_new --> O3 --> O4 --> O5["h_t"]
         O2 --> O4
     end
 ```
@@ -299,13 +299,13 @@ $$C_t = (1-i_t) \cdot C_{t-1} + i_t \cdot \tilde{C}_t$$
 
 ```mermaid
 flowchart TB
-    z[Update Gate<br/>σ] --> Merge
-    r[Reset Gate<br/>σ] --> Candidate[tanh]
+    z["Update Gate"] --> Merge
+    r["Reset Gate"] --> Candidate
     h_prev --> Merge
     Merge --> Candidate
-    z --> Final[×]
-    Merge --> Skip[1-×]
-    Candidate & Final & Skip --> h_t[h_t]
+    z --> Final
+    Merge --> Skip
+    Candidate & Final & Skip --> h_t
 ```
 
 These are only a few of the most notable LSTM variants. There are lots of others, like Depth Gated RNNs by Yao, et al. (2015). There's also some completely different approach to tackling long-term dependencies, like Clockwork RNNs by Koutnik, et al. (2014).
@@ -332,10 +332,8 @@ The LSTM algorithm's update complexity per weight and time step is essentially t
 
 ```mermaid
 flowchart LR
-    subgraph Comparison
-        RTRL[RTRL: O(n)] --> LSTM[LSTM: O(1)]
-        BPTT[BPTT: O(1)] -.-> LSTM
-    end
+    RTRL[RTRL] --> LSTM[LSTM]
+    BPTT -.-> LSTM
 ```
 
 ---

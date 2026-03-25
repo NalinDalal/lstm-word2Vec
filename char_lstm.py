@@ -221,6 +221,7 @@ def train(model, data, epochs, lr, print_every=1000, log_gradients=True):
             if len(batch) < 2:
                 continue
 
+            batch_size = len(batch)
             inputs = torch.LongTensor([seq[0] for seq in batch])
             targets = torch.LongTensor([seq[1] for seq in batch])
 
@@ -228,6 +229,16 @@ def train(model, data, epochs, lr, print_every=1000, log_gradients=True):
             targets = targets.to(device)
 
             optimizer.zero_grad()
+
+            # Reinitialize hidden if batch size changed
+            if hidden is None or hidden[0].size(1) != batch_size:
+                h0 = torch.zeros(model.num_layers, batch_size, model.hidden_dim).to(
+                    device
+                )
+                c0 = torch.zeros(model.num_layers, batch_size, model.hidden_dim).to(
+                    device
+                )
+                hidden = (h0, c0)
 
             outputs, hidden = model(inputs, hidden)
 
