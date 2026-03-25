@@ -17,12 +17,6 @@ Lecture 7 — Vanishing Gradients, Fancy RNNs ← this is literally LSTM
 # 7-Day Plan:
 
 
-Day 4 (Wednesday) — 4-5 hrs
-- Train at 10k steps, compare outputs
-- Train at 100k steps if time allows
-- Document gradient norm behavior
-
-
 Day 5 (Thursday) — 4-5 hrs
 - Read Word2Vec papers (both Mikolov papers)
 - Start skip-gram implementation
