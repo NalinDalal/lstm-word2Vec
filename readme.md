@@ -9,3 +9,7 @@
 
 
 - [Implementation of LSTM](./main.py)
+
+- [Word Vector Representation](./WordVectorRepre.md)
+
+- [Distributed Representations + Negative Sampling](./distributed-repre-neg-sample.md)
