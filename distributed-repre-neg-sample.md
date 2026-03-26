@@ -123,7 +123,7 @@ Treat identified phrases as single tokens during training.
 
 This allows learning:
 
-$$\vec{\text{New_York}} \approx \vec{\text{New}} + \vec{\text{York}}$$
+$$\vec{\text{NewYork}} \approx \vec{\text{New}} + \vec{\text{York}}$$
 
 or
 
