@@ -135,7 +135,7 @@ a word should be useful for predicting words appearing near it.
 
 Training complexity:
 
-$Q = C \times (D + D \times \log_2(V))$
+$$Q = C \times (D + D \times \log_2(V))$$
 
 Where:
 C = maximum distance of context window
@@ -147,6 +147,67 @@ Insights:
 * slightly slower than CBOW
 * more training signal per word
 * distant words are sampled less frequently (because less related)
+
+## **Dual Vector Representation**
+
+To calculate the probability $P(w_{t+j} \mid w_t; \theta)$, Word2Vec uses **two vectors per word**:
+
+**Two Vectors per Word $w$:**
+
+1. **$v_w$** (center vector): used when $w$ is a **center word** (the input/target word)
+
+2. **$u_w$** (context vector): used when $w$ is a **context word** (appearing in surrounding window)
+
+### **Probability Calculation**
+
+For a center word $c$ and a context word $o$:
+
+$$P(o \mid c) = \frac{\exp(u_o^T v_c)}{\sum_{w \in V} \exp(u_w^T v_c)}$$
+
+This is a **softmax function** over the entire vocabulary $V$.
+
+**Components:**
+
+- **Numerator**: $\exp(u_o^T v_c)$ measures compatibility/similarity between context word $o$ and center word $c$
+
+- **Denominator**: $\sum_{w \in V} \exp(u_w^T v_c)$ normalization term ensuring probabilities sum to 1
+
+- **Dot product**: $u_o^T v_c$ captures how likely word $o$ appears near word $c$
+
+**Why Two Vectors?**
+
+- Separates roles: predicting vs being predicted
+
+- Makes optimization more efficient  
+
+- Provides flexibility in modeling asymmetric relationships
+
+- Final word embeddings typically use only $v_w$ (center vectors) or average both
+
+**Training Process:**
+
+1. For each position $t$ in the corpus
+
+2. Use center vector $v_{w_t}$ for the current word
+
+3. Maximize probability of context words using their context vectors $u_{w_{t+j}}$
+
+4. Update both $v$ and $u$ vectors via gradient descent (typically SGD or Adagrad)
+
+**Computational Challenge:**
+
+The denominator requires summing over the entire vocabulary $V$ (often 10,000 - 100,000+ words):
+
+$$\sum_{w \in V} \exp(u_w^T v_c)$$
+
+This is computationally expensive.
+
+**Solutions:**
+
+1. **Hierarchical Softmax**: Reduces complexity from $O(V)$ to $O(\log_2 V)$ by organizing vocabulary as a Huffman binary tree
+
+2. **Negative Sampling**: Approximate by sampling a few negative examples instead of computing full softmax
+
 
 ---
 
